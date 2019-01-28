@@ -1,0 +1,29 @@
+---
+# tasks file for docker
+
+- name: Add docker yum repository
+  yum_repository:
+    name: docker-ce-stable
+    description: Docker CE Stable - $basearch
+    file: docker-ce
+    baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
+    gpgcheck: yes
+    gpgkey: https://download.docker.com/linux/centos/gpg
+
+- name: Install docker
+  yum:
+    name: docker-ce
+    state: installed
+
+- name: Start and enable docker
+  service:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Install docker-compose
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+    dest: /usr/local/bin/docker-compose
+    mode: 0755
+
