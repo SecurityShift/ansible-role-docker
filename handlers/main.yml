@@ -1,2 +1,12 @@
 ---
 # handlers file for docker
+
+- name: restart docker
+  service:
+    name: docker
+    state: restarted
+  when: no_restart is not defined and not no_restart
+
+- name: update aide
+  command: /usr/sbin/run-aide update
+  when: install_aide is defined and install_aide

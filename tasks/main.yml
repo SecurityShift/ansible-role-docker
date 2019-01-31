@@ -15,6 +15,22 @@
     name: '{{ docker_packages }}'
     state: installed
 
+- name: Ensures docker config dir exists
+  file:
+    path: /etc/docker
+    state: directory
+
+- name: update docker daemon configuration
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart docker
+    - update aide
+
 - name: Start and enable docker
   service:
     name: docker
